@@ -42,6 +42,10 @@ public class MyArray {
         return array[index];
     }
 
+    public int get_max_int() {
+        return num_max;
+    }
+
     /**
      * Swaps the values at index1 and index2
      */

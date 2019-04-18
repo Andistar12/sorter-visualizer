@@ -15,12 +15,24 @@ public class Main {
         int array_size = 100; // TODO setup scanner and read in input
         int nums_max = 100; // TODO
 
+        BubbleSorter bubble = new BubbleSorter();
+        SelectionSorter select = new SelectionSorter();
+        MyArray array = new MyArray(array_size, nums_max);
+
+        WindowManager visualizer = new WindowManager(array);
+        //visualizer.repaint();
+        select.selection_sort(array, visualizer);
+        //bubble.sort(array, visualizer);
+
+
+
+        /*
         // Create array
         MyArray array = new MyArray(array_size, nums_max);
         array.print();
 
         // Create sorter
-        SelectionSortAlgorithm SelSort = new SelectionSortAlgorithm();
+        SelectionSorter SelSort = new SelectionSorter();
 
         // Sort and print
         SelSort.selection_sort(array);
@@ -36,10 +48,11 @@ public class Main {
         array2.print();
 
         // Create sorter
-        BubbleSortAlgorithm bubbleSortAlgorithm = new BubbleSortAlgorithm();
+        BubbleSorter bubbleSortAlgorithm = new BubbleSorter();
 
         // Sort and print
         bubbleSortAlgorithm.sort(array2);
         array2.print();
+        */
     }
 }
