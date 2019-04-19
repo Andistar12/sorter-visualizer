@@ -12,47 +12,18 @@ public class Main {
     public static void main(String args[]) {
 
         // Get user input
-        int array_size = 100; // TODO setup scanner and read in input
-        int nums_max = 100; // TODO
+        int array_size = 12; // TODO setup scanner and read in input
+        int nums_max = 1000; // TODO
 
+        Bogosort bogo = new Bogosort();
         BubbleSorter bubble = new BubbleSorter();
         SelectionSorter select = new SelectionSorter();
+
         MyArray array = new MyArray(array_size, nums_max);
 
         WindowManager visualizer = new WindowManager(array);
-        //visualizer.repaint();
         select.selection_sort(array, visualizer);
         //bubble.sort(array, visualizer);
-
-
-
-        /*
-        // Create array
-        MyArray array = new MyArray(array_size, nums_max);
-        array.print();
-
-        // Create sorter
-        SelectionSorter SelSort = new SelectionSorter();
-
-        // Sort and print
-        SelSort.selection_sort(array);
-        array.print();
-
-
-        // Everything below is for bubble sort
-
-        System.out.println();
-
-        // Create array
-        MyArray array2 = new MyArray(array_size, nums_max);
-        array2.print();
-
-        // Create sorter
-        BubbleSorter bubbleSortAlgorithm = new BubbleSorter();
-
-        // Sort and print
-        bubbleSortAlgorithm.sort(array2);
-        array2.print();
-        */
+        //bogo.sort(array, visualizer);
     }
 }

@@ -18,18 +18,22 @@ public class WindowManager {
             @Override
             public void paintComponent(Graphics g) {
                 super.paintComponent(g); // Wipes the screen
-                g.setColor(Color.BLACK);
 
-                int column_width = WINDOW_WIDTH / array.get_array_length();
-                int scalar = WINDOW_HEIGHT / array.get_max_int();
+                // Calculate box width and heights
+                float column_width = 1.0f * WINDOW_WIDTH / array.get_array_length();
+                float row_height = 1.0f * (WINDOW_HEIGHT) / array.get_max_int();
 
-                int index_finder = 0;
-                for (int column_loop = 0; column_loop < array.get_array_length() * column_width; column_loop += column_width) {
-                    int x = column_loop;
-                    int y = WINDOW_HEIGHT - (array.get_value(index_finder) * scalar);
-                    int column_height = WINDOW_HEIGHT - y;
-                    g.fillRect(x, y, column_width, column_height);
-                    index_finder++;
+                for (int i = 0; i < array.get_array_length(); i++) {
+
+                    // Change color
+                    Color c = Color.getHSBColor(1.0f * array.get_value(i) / array.get_max_int(), 1.0f, 0.7f);
+                    g.setColor(c);
+
+                    // Calculate x and y positions
+                    float x = i * column_width;
+                    float y = WINDOW_HEIGHT - (array.get_value(i) * row_height);
+
+                    g.fillRect((int) x, (int) y, (int) column_width, WINDOW_HEIGHT - (int) y);
                 }
             }
         };
@@ -43,6 +47,7 @@ public class WindowManager {
 
     public void repaint() {
         canvas.repaint();
+
         try {
             Thread.sleep(10);
         } catch (InterruptedException e) {
