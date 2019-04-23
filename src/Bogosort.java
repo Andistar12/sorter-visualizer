@@ -8,7 +8,7 @@ public class Bogosort {
     public void sort(MyArray array, WindowManager wm) {
         while (!is_sorted(array)) {
             shuffle(array);
-            wm.repaint();
+            wm.repaint(array);
         }
     }
 

@@ -29,7 +29,7 @@ public class SelectionSorter {
 
             //array.print();
             array.swap(biggest_num_index, final_place);
-            wm.repaint();
+            wm.repaint(array);
         }
 
     }
