@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Display window to display the array
@@ -19,8 +21,12 @@ public class WindowManager {
     private JSlider slider1;
     private JLabel lblDelay;
 
+    private Thread thread;
 
-    public WindowManager(MyArray array){
+    // Temp variable for the class to allow access to paint
+    private MyArray array;
+
+    public WindowManager(String[] sorts){
         // Create the window and canvas
         window = new JFrame("Sorter");
         canvas = new JPanel() { // This is a custom JPanel
@@ -49,24 +55,25 @@ public class WindowManager {
                 */
 
                 // Circle
+                if (array != null) {
+                    float angle = (float) (2.0f * Math.PI / array.get_array_length());
+                    for (int i = 0; i < array.get_array_length(); i++) {
+                        // Change color via hue
+                        Color c = Color.getHSBColor(1.0f * array.get_value(i) / array.get_max_int(), 1.0f, 0.7f);
+                        g.setColor(c);
 
-                float angle = (float) (2.0f * Math.PI / array.get_array_length());
-                for (int i = 0; i < array.get_array_length(); i++) {
-                    // Change color via hue
-                    Color c = Color.getHSBColor(1.0f * array.get_value(i) / array.get_max_int(), 1.0f, 0.7f);
-                    g.setColor(c);
+                        // tRiGoNoMeTrY iS uSeFuL
+                        int[] x = {0,0,0};
+                        int[] y = {0,0,0};
+                        x[0] = canvas.getWidth() / 2;
+                        y[0] = canvas.getHeight() / 2;
+                        x[1] = (int) (x[0] * Math.cos((i) * angle + Math.PI / 2.0f) + x[0]);
+                        y[1] = (int) (y[0] * -Math.sin((i) * angle + Math.PI / 2.0f) + y[0]);
+                        x[2] = (int) (x[0] * Math.cos((i + 1) * angle + Math.PI / 2.0f) + x[0]);
+                        y[2] = (int) (y[0] * -Math.sin((i + 1) * angle + Math.PI / 2.0f) + y[0]);
 
-                    // tRiGoNoMeTrY iS uSeFuL
-                    int[] x = {0,0,0};
-                    int[] y = {0,0,0};
-                    x[0] = canvas.getWidth() / 2;
-                    y[0] = canvas.getHeight() / 2;
-                    x[1] = (int) (x[0] * Math.cos((i) * angle + Math.PI / 2.0f) + x[0]);
-                    y[1] = (int) (y[0] * -Math.sin((i) * angle + Math.PI / 2.0f) + y[0]);
-                    x[2] = (int) (x[0] * Math.cos((i + 1) * angle + Math.PI / 2.0f) + x[0]);
-                    y[2] = (int) (y[0] * -Math.sin((i + 1) * angle + Math.PI / 2.0f) + y[0]);
-
-                    g.fillPolygon(x, y, 3);
+                        g.fillPolygon(x, y, 3);
+                    }
                 }
             }
         };
@@ -143,7 +150,7 @@ public class WindowManager {
             gbc.anchor = GridBagConstraints.WEST;
             gbc.fill = GridBagConstraints.HORIZONTAL;
             panel2.add(txfRange, gbc);
-            comboSorts = new JComboBox();
+            comboSorts = new JComboBox<>(sorts);
             gbc = new GridBagConstraints();
             gbc.gridx = 1;
             gbc.gridy = 0;
@@ -209,7 +216,8 @@ public class WindowManager {
     /**
      * Repaints the canvas, then waits a preset amount of time
      */
-    public void repaint() {
+    public void repaint(MyArray array) {
+        this.array = array;
         canvas.repaint();
 
         lblDelay.setText("Delay: " + get_delay() + "ms");
@@ -240,6 +248,25 @@ public class WindowManager {
         } catch (NumberFormatException nfe) {
             return 500; // TODO find different way to set default
         }
+    }
+
+    public void set_on_run(Runnable run) {
+        // TODO fix concurrency
+        btnRun.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (thread != null) {
+                    thread.stop();
+                    thread = null;
+                }
+                thread = new Thread(run);
+                thread.start();
+            }
+        });
+    }
+
+    public int get_selected_sorter() {
+        return comboSorts.getSelectedIndex();
     }
 
     /**

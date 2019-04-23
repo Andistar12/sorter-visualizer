@@ -46,6 +46,8 @@ public class MyArray {
         return num_max;
     }
 
+    public void set_value(int index, int val) {array[index] = val; }
+
     /**
      * Swaps the values at index1 and index2
      */

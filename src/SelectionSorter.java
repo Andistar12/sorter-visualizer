@@ -3,7 +3,7 @@
  */
 public class SelectionSorter {
 
-    public void selection_sort(MyArray array, WindowManager wm) {
+    public void sort(MyArray array, WindowManager wm) {
         /**
          * Declare biggest_num int
          * Loop that scans the entire array

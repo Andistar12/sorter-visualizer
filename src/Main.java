@@ -1,3 +1,6 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
  *  Entry point for program
  *  Reads in user input and runs the visualizer with a generated array
@@ -11,19 +14,47 @@ public class Main {
 
     public static void main(String args[]) {
 
-        // Get user input
-        int array_size = 12; // TODO setup scanner and read in input
-        int nums_max = 1000; // TODO
+        // Create array
+        MyArray dummy = new MyArray(2000, 2000);
 
-        Bogosort bogo = new Bogosort();
-        BubbleSorter bubble = new BubbleSorter();
-        SelectionSorter select = new SelectionSorter();
+        String[] sorts = {
+                "Selection Sort",
+                "Bubble Sort",
+                "Bogo Sort",
+                "Radix Sort",
+                //"Quick Sort"
+        };
 
-        MyArray array = new MyArray(array_size, nums_max);
 
-        WindowManager visualizer = new WindowManager(array);
-        select.selection_sort(array, visualizer);
-        //bubble.sort(array, visualizer);
-        //bogo.sort(array, visualizer);
+
+        // Create visualizer
+        WindowManager visualizer = new WindowManager(sorts);
+        visualizer.repaint(dummy);
+
+        Runnable callback_on_run = new Runnable() {
+            @Override
+            public void run() {
+                // Get user input, create array to sort
+                int user_sort_input = visualizer.get_selected_sorter();
+                MyArray array = new MyArray(visualizer.get_array_size(), visualizer.get_max_int());
+
+                // Put sorter objects into array
+                ArrayList<Object> sorters = new ArrayList<>();
+                sorters.add(new SelectionSorter());
+                sorters.add(new BubbleSorter());
+                sorters.add(new Bogosort());
+                sorters.add(new RadixSort());
+                //sorters.add(new QuickSort());
+
+                sorters.get(visualizer.get_selected_sorter()).sort(array, visualizer);
+
+                Object sorter = sorters.get(visualizer.get_selected_sorter());
+                sorter.sort(array, visualizer);
+
+                SelectionSorter sorter1 = sorters.get(visualizer.get_selected_sorter());
+                sorter1.sort(array, visualizer);
+            }
+        };
+        visualizer.set_on_run(callback_on_run);
     }
 }
