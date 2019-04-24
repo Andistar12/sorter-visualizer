@@ -1,4 +1,4 @@
-public class BubbleSorter {
+public class BubbleSorter extends Sorter {
 
     /**
      * Sorts via bubble sort the given MyArray
@@ -12,6 +12,10 @@ public class BubbleSorter {
                 }
             }
         }
+    }
+
+    public String toString() {
+        return "Bubble Sort";
     }
 
 }

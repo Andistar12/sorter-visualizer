@@ -26,7 +26,7 @@ public class WindowManager {
     // Temp variable for the class to allow access to paint
     private MyArray array;
 
-    public WindowManager(String[] sorts){
+    public WindowManager(Sorter[] sorts){
         // Create the window and canvas
         window = new JFrame("Sorter");
         canvas = new JPanel() { // This is a custom JPanel

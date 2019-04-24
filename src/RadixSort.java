@@ -1,4 +1,4 @@
-public class RadixSort {
+public class RadixSort extends Sorter {
 
     /**
      *
@@ -31,5 +31,9 @@ public class RadixSort {
                 }
             }
         }
+    }
+
+    public String toString() {
+        return "Radix Sort (Base 10 LSD)";
     }
 }

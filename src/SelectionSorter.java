@@ -1,7 +1,7 @@
 /**
  * Sort MyArray objects using selection sort
  */
-public class SelectionSorter {
+public class SelectionSorter extends Sorter {
 
     public void sort(MyArray array, WindowManager wm) {
         /**
@@ -32,6 +32,10 @@ public class SelectionSorter {
             wm.repaint(array);
         }
 
+    }
+
+    public String toString() {
+        return "Selection Sort";
     }
 
 

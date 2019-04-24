@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class Bogosort {
+public class Bogosort extends Sorter {
 
     /**
      * Sorts via bubble sort the given MyArray
@@ -30,6 +30,10 @@ public class Bogosort {
 
             array.swap(randomValue, i);
         }
+    }
+
+    public String toString() {
+        return "Bogo Sort";
     }
 
 }

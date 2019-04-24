@@ -17,20 +17,21 @@ public class Main {
         // Create array
         MyArray dummy = new MyArray(2000, 2000);
 
-        String[] sorts = {
-                "Selection Sort",
-                "Bubble Sort",
-                "Bogo Sort",
-                "Radix Sort",
-                //"Quick Sort"
-        };
-
-
+        // Put sorter objects into array
+        Sorter[] sorters = new Sorter[6];
+        sorters[0] = new SelectionSorter();
+        sorters[1] = new BubbleSorter();
+        sorters[2] = new Bogosort();
+        sorters[3] = new RadixSort();
+        sorters[4] = new QuickSort();
+        sorters[5] = new RadixSorter2();
 
         // Create visualizer
-        WindowManager visualizer = new WindowManager(sorts);
+        WindowManager visualizer = new WindowManager(sorters);
         visualizer.repaint(dummy);
 
+        // Setup callback
+        // This is run when the user hits Run
         Runnable callback_on_run = new Runnable() {
             @Override
             public void run() {
@@ -38,21 +39,8 @@ public class Main {
                 int user_sort_input = visualizer.get_selected_sorter();
                 MyArray array = new MyArray(visualizer.get_array_size(), visualizer.get_max_int());
 
-                // Put sorter objects into array
-                ArrayList<Object> sorters = new ArrayList<>();
-                sorters.add(new SelectionSorter());
-                sorters.add(new BubbleSorter());
-                sorters.add(new Bogosort());
-                sorters.add(new RadixSort());
-                //sorters.add(new QuickSort());
-
-                sorters.get(visualizer.get_selected_sorter()).sort(array, visualizer);
-
-                Object sorter = sorters.get(visualizer.get_selected_sorter());
-                sorter.sort(array, visualizer);
-
-                SelectionSorter sorter1 = sorters.get(visualizer.get_selected_sorter());
-                sorter1.sort(array, visualizer);
+                // End goal
+                sorters[user_sort_input].sort(array, visualizer);
             }
         };
         visualizer.set_on_run(callback_on_run);
