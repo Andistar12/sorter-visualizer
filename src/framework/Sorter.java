@@ -1,3 +1,5 @@
+package framework;
+
 /**
  * Define a custom data type
  */
