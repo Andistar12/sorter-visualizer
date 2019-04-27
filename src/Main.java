@@ -16,7 +16,7 @@ public class Main {
             DEFAULT_MAX_INT = 2000, DEFAULT_VALS = 2000;
 
     public static final int
-            WINDOW_HEIGHT = 1500, WINDOW_WIDTH = 1500;
+            WINDOW_HEIGHT = 750, WINDOW_WIDTH = 750;
 
     public static void main(String[] args) {
 
