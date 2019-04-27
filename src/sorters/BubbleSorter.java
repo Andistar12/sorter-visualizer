@@ -14,9 +14,12 @@ public class BubbleSorter extends Sorter {
             for (int j = 0; j < i; j++) {
                 if (array.get_value(j) > array.get_value(j + 1)) {
                     array.swap(j + 1, j);
-                    wm.repaint(array);
+
+                    // Note: this will lag
+                    //wm.repaint(array);
                 }
             }
+            wm.repaint(array);
         }
     }
 
