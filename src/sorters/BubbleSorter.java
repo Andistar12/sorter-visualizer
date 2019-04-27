@@ -1,7 +1,13 @@
+package sorters;
+
+import framework.MyArray;
+import framework.Sorter;
+import framework.WindowManager;
+
 public class BubbleSorter extends Sorter {
 
     /**
-     * Sorts via bubble sort the given MyArray
+     * Sorts via bubble sort the given framework.MyArray
      */
     public void sort(MyArray array, WindowManager wm) {
         for (int i = array.get_array_length() - 1; i > 0; i--) {

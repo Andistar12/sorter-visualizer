@@ -1,9 +1,14 @@
+package sorters;
+
 import java.util.Random;
+import framework.MyArray;
+import framework.Sorter;
+import framework.WindowManager;
 
 public class Bogosort extends Sorter {
 
     /**
-     * Sorts via bubble sort the given MyArray
+     * Sorts via bubble sort the given framework.MyArray
      */
     public void sort(MyArray array, WindowManager wm) {
         while (!is_sorted(array)) {

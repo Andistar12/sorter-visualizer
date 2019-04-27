@@ -1,10 +1,16 @@
+package sorters;
+
+import framework.MyArray;
+import framework.Sorter;
+import framework.WindowManager;
+
 /**
- * Sort MyArray objects using selection sort
+ * Sort framework.MyArray objects using selection sort
  */
 public class SelectionSorter extends Sorter {
 
     public void sort(MyArray array, WindowManager wm) {
-        /**
+        /*
          * Declare biggest_num int
          * Loop that scans the entire array
          *      Loop that scans for the biggest number
@@ -12,7 +18,7 @@ public class SelectionSorter extends Sorter {
          */
 
         int length = array.get_array_length();
-        int biggest_num_index = 0;
+        int biggest_num_index;
 
         for (int final_place = length - 1; final_place >= 0; final_place--) {
 

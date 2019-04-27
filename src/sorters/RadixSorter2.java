@@ -1,3 +1,9 @@
+package sorters;
+
+import framework.MyArray;
+import framework.Sorter;
+import framework.WindowManager;
+
 public class RadixSorter2 extends Sorter {
 
     @Override
