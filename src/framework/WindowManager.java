@@ -1,16 +1,12 @@
+package framework;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Display window to display the array
  */
 public class WindowManager {
-
-    public static final int
-            WINDOW_HEIGHT = 750, WINDOW_WIDTH = 750;
-
     private JFrame window;
     private JPanel canvas;
 
@@ -26,33 +22,13 @@ public class WindowManager {
     // Temp variable for the class to allow access to paint
     private MyArray array;
 
-    public WindowManager(Sorter[] sorts){
+    public WindowManager(int width, int height, Sorter[] sorts){
         // Create the window and canvas
-        window = new JFrame("Sorter");
+        window = new JFrame("framework.Sorter");
         canvas = new JPanel() { // This is a custom JPanel
             @Override
             public void paintComponent(Graphics g) {
                 super.paintComponent(g); // Wipes the screen
-
-                // Bars
-                /*
-                // Calculate box width and heights
-                float column_width = 1.0f * canvas.getWidth() / array.get_array_length();
-                float row_height = 1.0f * (canvas.getHeight()) / array.get_max_int();
-
-                for (int i = 0; i < array.get_array_length(); i++) {
-
-                    // Change color via hue
-                    Color c = Color.getHSBColor(1.0f * array.get_value(i) / array.get_max_int(), 1.0f, 0.7f);
-                    g.setColor(c);
-
-                    // Calculate x and y positions
-                    float x = i * column_width;
-                    float y = canvas.getHeight() - (array.get_value(i) * row_height);
-
-                    g.fillRect((int) x, (int) y, (int) column_width, canvas.getHeight() - (int) y);
-                }
-                */
 
                 // Circle
                 if (array != null) {
@@ -195,6 +171,7 @@ public class WindowManager {
             slider1.setMajorTickSpacing(10);
             slider1.setMaximum(1000);
             slider1.setValue(1000);
+            slider1.addChangeListener(changeEvent -> repaint(null));
             gbc = new GridBagConstraints();
             gbc.gridx = 0;
             gbc.gridy = 2;
@@ -207,7 +184,7 @@ public class WindowManager {
 
         // Set up the window
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+        window.setSize(new Dimension(width, height));
         window.setResizable(false);
         window.setContentPane(contentPane);
         window.setVisible(true);
@@ -215,53 +192,60 @@ public class WindowManager {
 
     /**
      * Repaints the canvas, then waits a preset amount of time
+     * If null, only the delay label will change
      */
     public void repaint(MyArray array) {
-        this.array = array;
-        canvas.repaint();
+        int delay = get_delay();
+        int nano = delay % 1000000;
+        int millis = delay / 1000000;
+        lblDelay.setText("Delay: " + millis + "ms " + nano + "ns");
 
-        lblDelay.setText("Delay: " + get_delay() + "ms");
-        try {
-            Thread.sleep(get_delay());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+        if (array != null) {
+            this.array = array;
+            canvas.repaint();
+            try {
+                Thread.sleep(millis, nano);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     /**
      * Gets the user inputted value for size of array
      */
-    public int get_array_size() {
+    public int get_array_size(int val) {
         try {
             return Integer.parseInt(txfArraySize.getText());
         } catch (NumberFormatException nfe) {
-            return 500; // TODO find different way to set default
+            // Ignore
         }
+        txfArraySize.setText(val + "");
+        return val;
     }
 
     /**
      * Gets the user inputted value for max possible int in array
      */
-    public int get_max_int() {
+    public int get_max_int(int val) {
         try {
             return Integer.parseInt(txfRange.getText());
         } catch (NumberFormatException nfe) {
-            return 500; // TODO find different way to set default
+            // Ignore
         }
+        txfRange.setText(val + "");
+        return val;
     }
 
     public void set_on_run(Runnable run) {
-        // TODO fix concurrency
-        btnRun.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (thread != null) {
-                    thread.stop();
-                    thread = null;
-                }
-                thread = new Thread(run);
-                thread.start();
+        btnRun.addActionListener(e -> {
+            if (thread != null) {
+                thread.interrupt();
+                thread = null;
             }
+            thread = new Thread(run);
+            thread.start();
         });
     }
 
@@ -270,19 +254,11 @@ public class WindowManager {
     }
 
     /**
-     * Gets the user inputted value for delay time in ms
+     * Gets the user inputted value for delay time in nano
      */
     public int get_delay() {
-        // TODO find better scaling system
-        if (slider1.getValue() < 100) {
-            // Linearly scale to 10
-            return slider1.getValue() / 10;
-        } else if (slider1.getValue() < 500) {
-            // Linearly scale to 100
-            return slider1.getValue() / 5;
-        } else {
-            // Linearly scale to 1000
-            return slider1.getValue();
-        }
+        double exp = slider1.getValue() / 100.0 - 9; // Range -9, 1
+        exp = Math.min(0, exp); // Range -9, 0
+        return (int) (Math.pow(10.0, exp) * 1000000000.0);
     }
 }
