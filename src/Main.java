@@ -12,10 +12,10 @@ import sorters.*;
  */
 public class Main {
 
-    public static final int
-            DEFAULT_MAX_INT = 2000, DEFAULT_VALS = 2000;
+    private static final int
+            DEFAULT_MAX_INT = 500, DEFAULT_VALS = 500;
 
-    public static final int
+    private static final int
             WINDOW_HEIGHT = 750, WINDOW_WIDTH = 750;
 
     public static void main(String[] args) {
@@ -23,18 +23,18 @@ public class Main {
         // Create array
         MyArray dummy = new MyArray(DEFAULT_VALS, DEFAULT_MAX_INT);
 
-        // Put sorter objects into arra
-        Sorter[] sorters = new Sorter[10];
-        sorters[0] = new SelectionSorter();
-        sorters[1] = new BubbleSorter();
-        sorters[2] = new Bogosort();
-        sorters[3] = new RadixSort();
-        sorters[4] = new QuickSort();
-        sorters[5] = new RadixSorter2();
-        sorters[6] = new CountingSorter();
-        sorters[7] = new DoubleSelectionSort();
-        sorters[8] = new InsertionSorter();
-        sorters[9] = new PigeonholeSort();
+        // Put sorter objects into array
+        Sorter[] sorters = {
+            new SelectionSorter(),
+            new BubbleSorter(),
+            new RadixSort(),
+            new QuickSort(),
+            new RadixSorter2(),
+            new CountingSorter(),
+            new DoubleSelectionSort(),
+            new InsertionSorter(),
+            new PigeonholeSort(),
+        };
 
         // Create visualizer
         WindowManager visualizer = new WindowManager(WINDOW_WIDTH, WINDOW_HEIGHT, sorters);
