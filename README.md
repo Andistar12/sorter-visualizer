@@ -6,6 +6,8 @@ A Java visualizer for common sorting algorithms, written using Swing. Features:
 * Adjustable array size and number range
 * Adjustable delay between steps (logarithmetic scale)
 * Change render style between bar graph and circle graph
+* Built using built-in Swing library
+* Thread safe
 
 ![image](https://i.imgur.com/icBfNv0.png)
 
