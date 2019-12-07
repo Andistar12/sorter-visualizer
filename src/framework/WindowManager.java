@@ -7,7 +7,6 @@ import java.awt.*;
  * Display window to display the array
  */
 public class WindowManager {
-    private JFrame window;
     private JPanel canvas;
 
     private JTextField txfArraySize;
@@ -16,39 +15,65 @@ public class WindowManager {
     private JComboBox comboSorts;
     private JSlider slider1;
     private JLabel lblDelay;
+    private JRadioButton btnCircles;
 
     private Thread thread;
+    private boolean shouldStop = false;
 
     // Temp variable for the class to allow access to paint
     private MyArray array;
 
     public WindowManager(int width, int height, Sorter[] sorts){
         // Create the window and canvas
-        window = new JFrame("framework.Sorter");
+        JFrame window = new JFrame("Sorting Visualizations");
         canvas = new JPanel() { // This is a custom JPanel
             @Override
             public void paintComponent(Graphics g) {
                 super.paintComponent(g); // Wipes the screen
 
-                // Circle
+
                 if (array != null) {
-                    float angle = (float) (2.0f * Math.PI / array.get_array_length());
-                    for (int i = 0; i < array.get_array_length(); i++) {
-                        // Change color via hue
-                        Color c = Color.getHSBColor(1.0f * array.get_value(i) / array.get_max_int(), 1.0f, 0.7f);
-                        g.setColor(c);
+                    if (btnCircles.isSelected()) {
+                        // Circle
 
-                        // tRiGoNoMeTrY iS uSeFuL
-                        int[] x = {0,0,0};
-                        int[] y = {0,0,0};
-                        x[0] = canvas.getWidth() / 2;
-                        y[0] = canvas.getHeight() / 2;
-                        x[1] = (int) (x[0] * Math.cos((i) * angle + Math.PI / 2.0f) + x[0]);
-                        y[1] = (int) (y[0] * -Math.sin((i) * angle + Math.PI / 2.0f) + y[0]);
-                        x[2] = (int) (x[0] * Math.cos((i + 1) * angle + Math.PI / 2.0f) + x[0]);
-                        y[2] = (int) (y[0] * -Math.sin((i + 1) * angle + Math.PI / 2.0f) + y[0]);
+                        float angle = (float) (2.0f * Math.PI / array.get_array_length());
+                        for (int i = 0; i < array.get_array_length(); i++) {
+                            // Change color via hue
+                            Color c = Color.getHSBColor(1.0f * array.get_value(i) / array.get_max_int(), 1.0f, 0.7f);
+                            g.setColor(c);
 
-                        g.fillPolygon(x, y, 3);
+                            // tRiGoNoMeTrY iS uSeFuL
+                            int[] x = {0, 0, 0};
+                            int[] y = {0, 0, 0};
+                            x[0] = canvas.getWidth() / 2;
+                            y[0] = canvas.getHeight() / 2;
+                            x[1] = (int) (x[0] * Math.cos((i) * angle + Math.PI / 2.0f) + x[0]);
+                            y[1] = (int) (y[0] * -Math.sin((i) * angle + Math.PI / 2.0f) + y[0]);
+                            x[2] = (int) (x[0] * Math.cos((i + 1) * angle + Math.PI / 2.0f) + x[0]);
+                            y[2] = (int) (y[0] * -Math.sin((i + 1) * angle + Math.PI / 2.0f) + y[0]);
+
+                            g.fillPolygon(x, y, 3);
+                        }
+                    } else {
+                        // Bars
+
+                        // Calculate box width and heights
+                        float column_width = 1.0f * canvas.getWidth() / array.get_array_length();
+                        float row_height = 1.0f * (canvas.getHeight()) / array.get_max_int();
+
+                        for (int i = 0; i < array.get_array_length(); i++) {
+                            // Change color
+                            Color c = Color.getHSBColor(1.0f * array.get_value(i) / array.get_max_int(), 1.0f, 0.7f);
+                            g.setColor(c);
+
+                            // Calculate x and y positions
+                            float x = i * column_width;
+                            x = Math.max(x, 1.0f);
+                            float y = canvas.getHeight() - (array.get_value(i) * row_height);
+
+                            // Draw box
+                            g.fillRect((int) x, (int) y, (int) column_width, canvas.getHeight() - (int) y);
+                        }
                     }
                 }
             }
@@ -180,6 +205,42 @@ public class WindowManager {
             gbc.anchor = GridBagConstraints.WEST;
             gbc.fill = GridBagConstraints.HORIZONTAL;
             contentPane.add(slider1, gbc);
+            final JPanel panel5 = new JPanel();
+            panel5.setLayout(new GridBagLayout());
+            gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.gridy = 3;
+            gbc.weightx = 1.0;
+            gbc.weighty = 1.0;
+            gbc.anchor = GridBagConstraints.WEST;
+            contentPane.add(panel5, gbc);
+            JLabel drawStyle = new JLabel("Render style: ");
+            gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.weightx = 1.0;
+            gbc.weighty = 1.0;
+            gbc.anchor = GridBagConstraints.WEST;
+            panel5.add(drawStyle, gbc);
+            ButtonGroup bg = new ButtonGroup();
+            JRadioButton btnBars = new JRadioButton("Bars", true);
+            btnCircles = new JRadioButton("Circles", false);
+            bg.add(btnBars);
+            bg.add(btnCircles);
+            gbc = new GridBagConstraints();
+            gbc.gridx = 1;
+            gbc.gridy = 0;
+            gbc.weightx = 1.0;
+            gbc.weighty = 1.0;
+            gbc.anchor = GridBagConstraints.WEST;
+            panel5.add(btnBars, gbc);
+            gbc = new GridBagConstraints();
+            gbc.gridx = 2;
+            gbc.gridy = 0;
+            gbc.weightx = 1.0;
+            gbc.weighty = 1.0;
+            gbc.anchor = GridBagConstraints.WEST;
+            panel5.add(btnCircles, gbc);
         }
 
         // Set up the window
@@ -195,6 +256,7 @@ public class WindowManager {
      * If null, only the delay label will change
      */
     public void repaint(MyArray array) {
+        if (shouldStop) return;
         int delay = get_delay();
         int nano = delay % 1000000;
         int millis = delay / 1000000;
@@ -207,7 +269,7 @@ public class WindowManager {
             try {
                 Thread.sleep(millis, nano);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                // Ignore
             }
         }
     }
@@ -241,9 +303,16 @@ public class WindowManager {
     public void set_on_run(Runnable run) {
         btnRun.addActionListener(e -> {
             if (thread != null) {
-                thread.interrupt();
+                // Wait for other thread to stop
+                shouldStop = true;
+                //thread.interrupt();
+                while(thread.isAlive()) {
+                    // Stall
+                }
+
                 thread = null;
             }
+            shouldStop = false;
             thread = new Thread(run);
             thread.start();
         });
@@ -256,9 +325,9 @@ public class WindowManager {
     /**
      * Gets the user inputted value for delay time in nano
      */
-    public int get_delay() {
+    private int get_delay() {
         double exp = slider1.getValue() / 100.0 - 9; // Range -9, 1
         exp = Math.min(0, exp); // Range -9, 0
-        return (int) (Math.pow(10.0, exp) * 1000000000.0);
+        return (int) (Math.pow(10.0, exp) * 100000000.0);
     }
 }
